@@ -1,7 +1,23 @@
 /**
 
- 	Modified by: Christian T. Camma, Jonah B. Catindig
+ 	Modified by: 
+ 		Christian T. Camma
+ 		Jonah B. Catindig
  	Section: CMSC 125 T-2L
+
+	Project Description: 
+		The program behaves like a terminal/command prompt that accepts
+	the following commands:
+		arith <mode> <arguments>
+		stat <mode> <arguments>
+		min <argument/s>
+		max <argument/s>
+	which returns specific values that each commands represents.
+
+	constraints:
+		there is no default mode for arith and stat commands
+		arguments only accepts numbers
+		arith commands allows a minimum number of 2 arguments
  **/
 
 #include <stdio.h>
@@ -332,7 +348,7 @@ float mode(char* arr[], int size){
    	}
 
    	if (maxCount == 1){
-   		printf("No mode.\n");
+   		printf("no mode\n");
    	}
 
    	else{
@@ -350,7 +366,6 @@ float mode(char* arr[], int size){
 int arithFunction(char* arr[100], int size){
 	float answer;
 	int answerMod;
-	int number;
 	if(size==1){
 		printf("expected argument after %s\n",arr[0]);
 		return 0;
@@ -436,7 +451,6 @@ int arithFunction(char* arr[100], int size){
 
 int statFunction(char* arr[100], int size){
 	float answer;
-	int n=2,index=0,number;
 	if(size==1){
 		printf("expected argument after %s\n",arr[0]);
 		return 0;
@@ -446,11 +460,8 @@ int statFunction(char* arr[100], int size){
 			return 0;
 		}else{
 			if(strcmp(arr[1],"-mn")==0||strcmp(arr[1],"-mean")==0){					// addition operation
-				if(checkSize(size)==1){
+				if(size>2){
 					answer = mean(arr, size);
-					return 0;
-				}else if(checkSize(size)==2){
-					printf("expected at least 2 operands\n");
 					return 0;
 				}else{
 					printf("expected arguments after %s\n",arr[1]);
@@ -458,11 +469,8 @@ int statFunction(char* arr[100], int size){
 				}
 				
 			}else if(strcmp(arr[1],"-md")==0||strcmp(arr[1],"-median")==0){	
-				if(checkSize(size)==1){
+				if(size>2){
 					answer = median(arr, size);
-					return 0;
-				}else if(checkSize(size)==2){
-					printf("expected at least 2 operands\n");
 					return 0;
 				}else{
 					printf("expected arguments after %s\n",arr[1]);
@@ -470,11 +478,8 @@ int statFunction(char* arr[100], int size){
 				}
 				
 			}else if(strcmp(arr[1],"-mo")==0||strcmp(arr[1],"-mode")==0){					// addition operation
-				if(checkSize(size)==1){
+				if(size>2){
 					answer = mode(arr, size);
-					return 0;
-				}else if(checkSize(size)==2){
-					printf("expected at least 2 operands\n");
 					return 0;
 				}else{
 					printf("expected arguments after %s\n",arr[1]);
@@ -489,43 +494,120 @@ int statFunction(char* arr[100], int size){
 	}
 }
 
+float minimum(char* arr[100], int size){
+	int number,n=1;
+	float min=19999998;
+	while(n<size){
+		if(isNumber(arr[n])==0){
+			printf("expected number data type in operand %d\n",(n));
+			return 0;
+		}
+		else{
+			if(atof(arr[n])<min){
+				min=atof(arr[n]);
+			}
+		}
+		n++;
+	}
+	if(min-(int)min==0){
+		number = (int)min;
+		printf("%d\n",number);
+	}else{
+		printf("%f\n",min);	
+	}
+	return min;
+}
+
+float maximum(char* arr[100], int size){
+	int number,n=1;
+	float max=-19999998;
+	while(n<size){
+		if(isNumber(arr[n])==0){
+			printf("expected number data type in operand %d\n",(n));
+			return 0;
+		}
+		else{
+			if(atof(arr[n])>max){
+				max=atof(arr[n]);
+			}
+		}
+		n++;
+	}
+	if(max-(int)max==0){
+		number = (int)max;
+		printf("%d\n",number);
+	}else{
+		printf("%f\n",max);	
+	}
+	return max;
+}
+
+int minFunction(char* arr[100], int size){
+	int number;
+	if(size==1){
+		printf("expected argument after %s\n",arr[0]);
+		return 0;
+	}else{
+		number = minimum(arr,size);
+		return 0;
+	}
+}
+
+int maxFunction(char* arr[100], int size){
+	int number;
+	if(size==1){
+		printf("expected argument after %s\n",arr[0]);
+		return 0;
+	}else{
+		number = maximum(arr,size);
+		return 0;
+	}
+}
+
 int main()
 {
 	pid_t pid1, checker; 
 	int i=0, flag = 0, numOfArgs = 0,index=0;
-	char command[100],tempCommand[100];									// variable for input string
-	char *tempArg;
-	char* initCommand[5] = {"","","","",NULL};
-	char* command4[5] = {"","","","",NULL};
+	char command[100],tempCommand[100];
 	char* com;
 
 	inputPrompt();
+	strcpy(command,"");
 	scanf("%[^\n]s", command);
 	while(strcmp(command,"quit")!=0 && strcmp(command,"q")!=0 && strcmp(command,"exit")!=0){
-		checker = wait(NULL); //the wait() function returns the PID of the terminated child.
-		strcpy(tempCommand,command);
-		int size=0;
-		com = strtok(command," ");
-		while(com != NULL){
-			com = strtok(NULL," ");
-			size++;
-		}
-		char* argsArr[100];
-		i=0;
-		argsArr[i] = strtok(tempCommand," ");
-		while(argsArr[i]!=NULL){
-			argsArr[++i]=strtok(NULL," ");
-		}
-		if(strcmp(argsArr[0],"arith")==0){
-			int num = arithFunction(argsArr,size);
-		}else if(strcmp(argsArr[0],"stat")==0){
-			int num = statFunction(argsArr,size);
-		}else{
-			printf("%s: command not found\n",argsArr[0]);
+		checker = wait(NULL); 						//the wait() function returns the PID of the terminated child.
+		if(strcmp(command,"")==0){					// if there is no input command
+			printf("expected command\n");
+		}else{										// user input command
+			strcpy(tempCommand,command);
+			int size=0;
+			com = strtok(command," ");				// transfers each word in command to array of string separated by space character
+			while(com != NULL){
+				com = strtok(NULL," ");
+				size++;
+			}
+			char* argsArr[100];
+			i=0;
+			argsArr[i] = strtok(tempCommand," ");
+			while(argsArr[i]!=NULL){
+				argsArr[++i]=strtok(NULL," ");
+			}
+			if(strcmp(argsArr[0],"arith")==0){				// arithmetic command
+				int num = arithFunction(argsArr,size);
+			}else if(strcmp(argsArr[0],"stat")==0){			// statistics command
+				int num = statFunction(argsArr,size);
+			}else if(strcmp(argsArr[0],"min")==0){			// minimum command
+				int num = minFunction(argsArr,size);
+			}else if(strcmp(argsArr[0],"max")==0){			// maximum command
+				int num = maxFunction(argsArr,size);
+			}else{											// input command is not supported by the program
+				printf("%s: command not found\n",argsArr[0]);
+			}
 		}
 		inputPrompt();
 		getchar();
-		scanf("%[^\n]s", command);
+		strcpy(command,"");							// update command value to empty string
+		scanf("%[^\n]s", command);					// accepts new command
 	}
 	printf("program terminated\n");
 }
