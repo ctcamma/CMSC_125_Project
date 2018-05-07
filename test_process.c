@@ -31,6 +31,7 @@
 
 typedef struct history{
 	char inputCommand[100];
+	int commandCount;
 	struct history *next;
 }HIST;
 
@@ -38,9 +39,25 @@ void inputPrompt(){							// main menu function
 	printf(">> ");
 }
 
-void commandLog(char* arr[100]){
+// void commandLog(HIST *head, ){
+// 	HIST *temp;
+// 	temp = head;					//temp points to whatever head ois pointing to
+// 	while (temp->next != NULL){
+// 		temp = temp->next;
+// 	}
+// 	temp->next = malloc(sizeof(single));	//memory allocation
+// 	printf("Enter a number: ");
+// 	scanf("%d", &temp->next->num);
+// 	temp->next->next = NULL;		//marks the end of the linked list
 
-}
+// 	printf("Ouput: ");
+// 	temp = head;					//temp points again to whatever head is pointing to
+// 	while (temp != NULL){
+// 		printf("%d ", temp->num);	//prints the output
+// 		temp = temp->next;			//proceeds to the next node
+// 	}
+// 	printf("\n");
+// }
 
 int modeIsNumber(char word[]){
 	int length = strlen(word);
@@ -364,7 +381,7 @@ float mode(char* arr[], int size){
 	   	}
 
 	   	if (maxCount == 1){
-	   		printf("no mode\n");
+	   		printf("No mode\n");
 	   	}
 
 	   	else{
@@ -581,16 +598,38 @@ int maxFunction(char* arr[100], int size){
 	}
 }
 
+void viewHistory(HIST *head, HIST *tail){
+	HIST *temp;
+	temp = head;
+	while (temp != NULL){
+		printf("%d. %s\n", temp->commandCount, temp->inputCommand);
+		temp = temp->next;
+	}
+}
+
 int main()
 {
 	pid_t pid1, checker; 
 	int i=0, flag = 0, numOfArgs = 0,index=0;
 	char command[100],tempCommand[100];
 	char* com;
+	int count = 0;
+	HIST *head = NULL, *tail;
 
 	inputPrompt();
 	strcpy(command,"");
 	scanf("%[^\n]s", command);
+
+	if (count == 0){
+		if (head == NULL){		//creates a head node
+			head = malloc(sizeof(HIST));
+			strcpy(head->inputCommand, command);
+			head->commandCount = count + 1;
+			head->next = NULL;
+			count = count + 1;
+		}
+	}
+
 	while(strcmp(command,"quit")!=0 && strcmp(command,"q")!=0 && strcmp(command,"exit")!=0){
 		checker = wait(NULL); 						//the wait() function returns the PID of the terminated child.
 		if(strcmp(command,"")==0){					// if there is no input command
@@ -617,6 +656,8 @@ int main()
 				int num = minFunction(argsArr,size);
 			}else if(strcmp(argsArr[0],"max")==0){			// maximum command
 				int num = maxFunction(argsArr,size);
+			}else if(strcmp(argsArr[0], "history") == 0){
+				viewHistory(head, tail);
 			}else{											// input command is not supported by the program
 				printf("%s: command not found\n",argsArr[0]);
 			}
@@ -625,6 +666,20 @@ int main()
 		getchar();
 		strcpy(command,"");							// update command value to empty string
 		scanf("%[^\n]s", command);					// accepts new command
+	
+		if (count > 0){
+			HIST *temp = head;
+			while (temp->next != NULL){
+				temp = temp->next;
+			}
+			temp->next = malloc(sizeof(HIST));
+			strcpy(temp->next->inputCommand, command);
+			temp->next->commandCount = count + 1;
+			temp->next->next = NULL;
+
+			count = count + 1;
+		}
+
 	}
 	printf("program terminated\n");
 }
