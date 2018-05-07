@@ -28,10 +28,13 @@
 #include <unistd.h>
 #include <stdarg.h>		// package for letting dynamic number of arguments in parameter passing
 #include <sys/wait.h> 	//includes the prototype for the wait() function
+#define RESET "\033[0m"
+#define RED "\033[31m"
 
 typedef struct history{
 	char inputCommand[100];
 	int commandCount;
+	int valid;
 	struct history *next;
 }HIST;
 
@@ -107,7 +110,7 @@ int checkSize(int size){					// checks the input if it has an appropriate length
 	}
 }
 
-float addition(char* arr[100], int size){
+int addition(char* arr[100], int size){
 	int number,n=2;
 	float sum=0;
 	while(n<size){
@@ -126,10 +129,10 @@ float addition(char* arr[100], int size){
 	}else{
 		printf("%f\n",sum);	
 	}
-	return sum;
+	return 1;
 }
 
-float subtraction(char* arr[100], int size){
+int subtraction(char* arr[100], int size){
 	int number,n=2;
 	float diff;
 	diff=atof(arr[n]);
@@ -148,10 +151,10 @@ float subtraction(char* arr[100], int size){
 	}else{
 		printf("%f\n",diff);	
 	}
-	return diff;
+	return 1;
 }
 
-float multiplication(char* arr[100], int size){
+int multiplication(char* arr[100], int size){
 	int number,n=2;
 	float product;
 	product=atof(arr[n]);
@@ -170,10 +173,10 @@ float multiplication(char* arr[100], int size){
 	}else{
 		printf("%f\n",product);	
 	}
-	return product;
+	return 1;
 }
 
-float division(char* arr[100], int size){
+int division(char* arr[100], int size){
 	int number,n=2;
 	float quotient;
 	quotient=atof(arr[n]);
@@ -192,10 +195,10 @@ float division(char* arr[100], int size){
 	}else{
 		printf("%f\n",quotient);	
 	}
-	return quotient;
+	return 1;
 }
 
-float exponentiation(char* arr[100], int size){
+int exponentiation(char* arr[100], int size){
 	int number,n=2;
 	double power,base;
 	power=atof(arr[size-1]);
@@ -219,7 +222,7 @@ float exponentiation(char* arr[100], int size){
 	}else{
 		printf("%f\n",power);	
 	}
-	return power;
+	return 1;
 }
 
 int modulo(char* arr[100], int size){
@@ -240,10 +243,10 @@ int modulo(char* arr[100], int size){
 	}else{
 		printf("%d\n",modulo);	
 	}
-	return modulo;
+	return 1;
 }
 
-float mean(char* arr[100], int size){
+int mean(char* arr[100], int size){
 	int n = 2;
 	int number = 2;
 	float meanAns;
@@ -267,10 +270,10 @@ float mean(char* arr[100], int size){
 		meanAns = sum / (size - 2);
 		printf("%f\n", meanAns);
 	}
-	return meanAns;
+	return 1;
 }
 
-float median(char* arr[100], int size){
+int median(char* arr[100], int size){
 	int medArrSize = size - 2;
 	float medArr[medArrSize];
 	float temp = (float) medArrSize / 2;
@@ -324,7 +327,7 @@ float median(char* arr[100], int size){
 		printf("%f\n", medAns);
 	}
 
-	return medArr[middle];
+	return 1;
 }
 
 float mode(char* arr[], int size){
@@ -352,7 +355,7 @@ float mode(char* arr[], int size){
 			else{
 				printf("%f\n", modAns);
 			}
-			return modAns;
+			return 1;
 		} 
 	}else{
 		while (n < size){
@@ -382,6 +385,7 @@ float mode(char* arr[], int size){
 
 	   	if (maxCount == 1){
 	   		printf("No mode\n");
+	   		return 0;
 	   	}
 
 	   	else{
@@ -393,12 +397,12 @@ float mode(char* arr[], int size){
 				printf("%f\n", modAns);
 			}
 	   	}
-	   	return modAns;
+	   	return 1;
 	}
 }
 
 int arithFunction(char* arr[100], int size){
-	float answer;
+	int answer;
 	int answerMod;
 	if(size==1){
 		printf("expected argument after %s\n",arr[0]);
@@ -411,7 +415,7 @@ int arithFunction(char* arr[100], int size){
 			if(strcmp(arr[1],"-add")==0){					// addition operation
 				if(checkSize(size)==1){
 					answer=addition(arr,size);
-					return 0;
+					return answer;
 				}else if(checkSize(size)==2){
 					printf("expected at least 2 operands\n");
 					return 0;
@@ -423,7 +427,7 @@ int arithFunction(char* arr[100], int size){
 			}else if(strcmp(arr[1],"-sub")==0){				// subtraction operation
 				if(checkSize(size)==1){
 					answer=subtraction(arr,size);
-					return 0;
+					return answer;
 				}else if(checkSize(size)==2){
 					printf("expected at least 2 operands\n");
 					return 0;
@@ -434,7 +438,7 @@ int arithFunction(char* arr[100], int size){
 			}else if(strcmp(arr[1],"-mul")==0){				// multiplication operation
 				if(checkSize(size)==1){
 					answer=multiplication(arr,size);
-					return 0;
+					return answer;
 				}else if(checkSize(size)==2){
 					printf("expected at least 2 operands\n");
 					return 0;
@@ -445,7 +449,7 @@ int arithFunction(char* arr[100], int size){
 			}else if(strcmp(arr[1],"-div")==0){				// division operation
 				if(checkSize(size)==1){
 					answer=division(arr,size);
-					return 0;
+					return answer;
 				}else if(checkSize(size)==2){
 					printf("expected at least 2 operands\n");
 					return 0;
@@ -456,7 +460,7 @@ int arithFunction(char* arr[100], int size){
 			}else if(strcmp(arr[1],"-pow")==0){				// modulo operation
 				if(checkSize(size)==1){
 					answer=exponentiation(arr,size);
-					return 0;
+					return answer;
 				}else if(checkSize(size)==2){
 					printf("expected at least 2 operands\n");
 					return 0;
@@ -467,7 +471,7 @@ int arithFunction(char* arr[100], int size){
 			}else if(strcmp(arr[1],"-mod")==0){				// modulo operation
 				if(checkSize(size)==1){
 					answerMod=modulo(arr,size);
-					return 0;
+					return answer;
 				}else if(checkSize(size)==2){
 					printf("expected at least 2 operands\n");
 					return 0;
@@ -484,7 +488,7 @@ int arithFunction(char* arr[100], int size){
 }
 
 int statFunction(char* arr[100], int size){
-	float answer;
+	int answer;
 	if(size==1){
 		printf("expected argument after %s\n",arr[0]);
 		return 0;
@@ -496,7 +500,7 @@ int statFunction(char* arr[100], int size){
 			if(strcmp(arr[1],"-mn")==0||strcmp(arr[1],"-mean")==0){					// addition operation
 				if(size>2){
 					answer = mean(arr, size);
-					return 0;
+					return answer;
 				}else{
 					printf("expected arguments after %s\n",arr[1]);
 					return 0;
@@ -505,7 +509,7 @@ int statFunction(char* arr[100], int size){
 			}else if(strcmp(arr[1],"-md")==0||strcmp(arr[1],"-median")==0){	
 				if(size>2){
 					answer = median(arr, size);
-					return 0;
+					return answer;
 				}else{
 					printf("expected arguments after %s\n",arr[1]);
 					return 0;
@@ -514,7 +518,7 @@ int statFunction(char* arr[100], int size){
 			}else if(strcmp(arr[1],"-mo")==0||strcmp(arr[1],"-mode")==0){					// addition operation
 				if(size>2){
 					answer = mode(arr, size);
-					return 0;
+					return answer;
 				}else{
 					printf("expected arguments after %s\n",arr[1]);
 					return 0;
@@ -549,10 +553,10 @@ float minimum(char* arr[100], int size){
 	}else{
 		printf("%f\n",min);	
 	}
-	return min;
+	return 1;
 }
 
-float maximum(char* arr[100], int size){
+int maximum(char* arr[100], int size){
 	int number,n=1;
 	float max=-19999998;
 	while(n<size){
@@ -573,7 +577,7 @@ float maximum(char* arr[100], int size){
 	}else{
 		printf("%f\n",max);	
 	}
-	return max;
+	return 1;
 }
 
 int minFunction(char* arr[100], int size){
@@ -583,7 +587,7 @@ int minFunction(char* arr[100], int size){
 		return 0;
 	}else{
 		number = minimum(arr,size);
-		return 0;
+		return number;
 	}
 }
 
@@ -594,16 +598,22 @@ int maxFunction(char* arr[100], int size){
 		return 0;
 	}else{
 		number = maximum(arr,size);
-		return 0;
+		return 1;
 	}
 }
 
-void viewHistory(HIST *head, HIST *tail){
+int viewHistory(HIST *head, HIST *tail){
 	HIST *temp;
 	temp = head;
 	while (temp != NULL){
-		printf("%d. %s\n", temp->commandCount, temp->inputCommand);
-		temp = temp->next;
+		if(temp->valid==1){
+			printf("%d. %s\n", temp->commandCount, temp->inputCommand);
+			temp = temp->next;
+		}else{
+			printf("%d.",temp->commandCount);
+			printf(RED" %s\n" RESET, temp->inputCommand);
+			temp = temp->next;
+		}		
 	}
 }
 
@@ -611,31 +621,36 @@ int main()
 {
 	pid_t pid1, checker; 
 	int i=0, flag = 0, numOfArgs = 0,index=0;
-	char command[100],tempCommand[100];
+	char command[100],tempCommand[100],commandToHistory[100];
 	char* com;
-	int count = 0;
+	int count = 0,valid=0,skipCommandHistory=0;
 	HIST *head = NULL, *tail;
 
 	inputPrompt();
 	strcpy(command,"");
 	scanf("%[^\n]s", command);
 
-	if (count == 0){
-		if (head == NULL){		//creates a head node
-			head = malloc(sizeof(HIST));
-			strcpy(head->inputCommand, command);
-			head->commandCount = count + 1;
-			head->next = NULL;
-			count = count + 1;
-		}
-	}
+	// if (count == 0){
+	// 	if (head == NULL){		//creates a head node
+	// 		head = malloc(sizeof(HIST));
+	// 		strcpy(head->inputCommand, command);
+	// 		head->commandCount = count + 1;
+	// 		head->next = NULL;
+	// 		count = count + 1;
+	// 	}
+	// }
 
 	while(strcmp(command,"quit")!=0 && strcmp(command,"q")!=0 && strcmp(command,"exit")!=0){
+		
 		checker = wait(NULL); 						//the wait() function returns the PID of the terminated child.
 		if(strcmp(command,"")==0){					// if there is no input command
 			printf("expected command\n");
+			skipCommandHistory=1;
+			valid=0;
 		}else{										// user input command
+			skipCommandHistory=0;
 			strcpy(tempCommand,command);
+			strcpy(commandToHistory,command);
 			int size=0;
 			com = strtok(command," ");				// transfers each word in command to array of string separated by space character
 			while(com != NULL){
@@ -649,37 +664,49 @@ int main()
 				argsArr[++i]=strtok(NULL," ");
 			}
 			if(strcmp(argsArr[0],"arith")==0){				// arithmetic command
-				int num = arithFunction(argsArr,size);
+				valid = arithFunction(argsArr,size);
 			}else if(strcmp(argsArr[0],"stat")==0){			// statistics command
-				int num = statFunction(argsArr,size);
+				valid = statFunction(argsArr,size);
 			}else if(strcmp(argsArr[0],"min")==0){			// minimum command
-				int num = minFunction(argsArr,size);
+				valid = minFunction(argsArr,size);
 			}else if(strcmp(argsArr[0],"max")==0){			// maximum command
-				int num = maxFunction(argsArr,size);
+				valid = maxFunction(argsArr,size);
 			}else if(strcmp(argsArr[0], "history") == 0){
 				viewHistory(head, tail);
+				valid=1;
 			}else{											// input command is not supported by the program
 				printf("%s: command not found\n",argsArr[0]);
+				valid=0;
 			}
 		}
-		inputPrompt();
-		getchar();
-		strcpy(command,"");							// update command value to empty string
-		scanf("%[^\n]s", command);					// accepts new command
-	
-		if (count > 0){
+
+		if(count==0 && skipCommandHistory==0){
+			if (head == NULL){		//creates a head node
+				head = malloc(sizeof(HIST));
+				strcpy(head->inputCommand, commandToHistory);
+				head->commandCount = count + 1;
+				head->valid=valid;
+				head->next = NULL;
+				count = count + 1;
+			}
+		}
+		else if (count >= 1 && skipCommandHistory==0){
 			HIST *temp = head;
 			while (temp->next != NULL){
 				temp = temp->next;
 			}
 			temp->next = malloc(sizeof(HIST));
-			strcpy(temp->next->inputCommand, command);
+			strcpy(temp->next->inputCommand, commandToHistory);
 			temp->next->commandCount = count + 1;
+			temp->next->valid = valid;
 			temp->next->next = NULL;
 
 			count = count + 1;
 		}
-
+		inputPrompt();
+		getchar();
+		strcpy(command,"");							// update command value to empty string
+		scanf("%[^\n]s", command);					// accepts new command
 	}
 	printf("program terminated\n");
 }
