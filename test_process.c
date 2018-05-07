@@ -18,6 +18,7 @@
 		there is no default mode for arith and stat commands
 		arguments only accepts numbers
 		arith commands allows a minimum number of 2 arguments
+		the length of input commands for each line is limited to 100 characters
  **/
 
 #include <stdio.h>
@@ -201,9 +202,21 @@ int division(char* arr[100], int size){
 int exponentiation(char* arr[100], int size){
 	int number,n=2;
 	double power,base;
-	power=atof(arr[size-1]);
-	base=atof(arr[size-2]);
+	
+	if(isNumber(arr[size-1])!=0){												// checks if the last operand is a number
+		power=atof(arr[size-1]);	
+	}else{
+		printf("expected number data type in operand %d\n",(size-2));
+		return 0;
+	}
+	if(isNumber(arr[size-2])!=0){												// checks if the second to the last operand is a number
+		base=atof(arr[size-2]);	
+	}else{
+		printf("expected number data type in operand %d\n",(size-3));
+		return 0;	
+	}
 	n=size-2;
+	
 	while(n>=2){
 		if(isNumber(arr[n])==0){
 			printf("expected number data type in operand %d\n",(n-1));
