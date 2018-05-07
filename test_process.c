@@ -322,45 +322,62 @@ float mode(char* arr[], int size){
 	int maxCount = 0;
 
 	n++;
-	while (n < size){
-		if(isNumber(arr[n])==0){
-			printf("expected number data type in operand %d\n",(n - 1));
+	if(size==3){									// if the input has one operand, it will be the mode
+		if(isNumber(arr[2])==0){
+			printf("expected number data type in operand 1\n");
 			return 0;
+		}else{
+			modAns=atof(arr[2]);
+		   	if (modAns - (int) modAns == 0){
+				number = (int) modAns;
+				printf("%d\n", number);
+			}
+			else{
+				printf("%f\n", modAns);
+			}
+			return modAns;
+		} 
+	}else{
+		while (n < size){
+			if(isNumber(arr[n])==0){
+				printf("expected number data type in operand %d\n",(n - 1));
+				return 0;
+			}
+			n++;
 		}
-		n++;
+
+		for (i = 0; i < modArrSize; i++){
+			modArr[i] = atof(arr[i + 2]);
+		}
+
+		for (i = 0; i < modArrSize; i++) {
+		    int count = 0;
+		    for (j = 0; j < modArrSize; j++){
+		       	if (modArr[j] == modArr[i]){
+		       		count = count + 1;
+		   		}
+		    }
+		    if (count > maxCount) {
+		       	maxCount = count;
+		       	modAns = modArr[i];
+		    }
+	   	}
+
+	   	if (maxCount == 1){
+	   		printf("no mode\n");
+	   	}
+
+	   	else{
+	   		if (modAns - (int) modAns == 0){
+				number = (int) modAns;
+				printf("%d\n", number);
+			}
+			else{
+				printf("%f\n", modAns);
+			}
+	   	}
+	   	return modAns;
 	}
-
-	for (i = 0; i < modArrSize; i++){
-		modArr[i] = atof(arr[i + 2]);
-	}
-
-	for (i = 0; i < modArrSize; i++) {
-	    int count = 0;
-	    for (j = 0; j < modArrSize; j++){
-	       	if (modArr[j] == modArr[i]){
-	       		count = count + 1;
-	   		}
-	    }
-	    if (count > maxCount) {
-	       	maxCount = count;
-	       	modAns = modArr[i];
-	    }
-   	}
-
-   	if (maxCount == 1){
-   		printf("no mode\n");
-   	}
-
-   	else{
-   		if (modAns - (int) modAns == 0){
-			number = (int) modAns;
-			printf("%d\n", number);
-		}
-		else{
-			printf("%f\n", modAns);
-		}
-   	}
-   	return modAns;
 }
 
 int arithFunction(char* arr[100], int size){
