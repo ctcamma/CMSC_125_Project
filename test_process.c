@@ -43,26 +43,6 @@ void inputPrompt(){							// main menu function
 	printf(">> ");
 }
 
-// void commandLog(HIST *head, ){
-// 	HIST *temp;
-// 	temp = head;					//temp points to whatever head ois pointing to
-// 	while (temp->next != NULL){
-// 		temp = temp->next;
-// 	}
-// 	temp->next = malloc(sizeof(single));	//memory allocation
-// 	printf("Enter a number: ");
-// 	scanf("%d", &temp->next->num);
-// 	temp->next->next = NULL;		//marks the end of the linked list
-
-// 	printf("Ouput: ");
-// 	temp = head;					//temp points again to whatever head is pointing to
-// 	while (temp != NULL){
-// 		printf("%d ", temp->num);	//prints the output
-// 		temp = temp->next;			//proceeds to the next node
-// 	}
-// 	printf("\n");
-// }
-
 int modeIsNumber(char word[]){
 	int length = strlen(word);
 	int index,decimalPointNum=0;
@@ -642,16 +622,6 @@ int main()
 	inputPrompt();
 	strcpy(command,"");
 	scanf("%[^\n]s", command);
-
-	// if (count == 0){
-	// 	if (head == NULL){		//creates a head node
-	// 		head = malloc(sizeof(HIST));
-	// 		strcpy(head->inputCommand, command);
-	// 		head->commandCount = count + 1;
-	// 		head->next = NULL;
-	// 		count = count + 1;
-	// 	}
-	// }
 
 	while(strcmp(command,"quit")!=0 && strcmp(command,"q")!=0 && strcmp(command,"exit")!=0){
 		
