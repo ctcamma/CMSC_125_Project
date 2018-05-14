@@ -631,16 +631,16 @@ int main()
 	scanf("%[^\n]s", command);
 	
 	while(strcmp(command,"quit")!=0 && strcmp(command,"q")!=0 && strcmp(command,"exit")!=0){
-		pid1 = fork();	
-		if (pid1 > 0){
-			checker = wait(NULL); 						//the wait() function returns the PID of the terminated child.
-		}
-		else if (pid1 == 0){
-			if(strcmp(command,"")==0){					// if there is no input command
-				printf("Expected command\n");
-				skipCommandHistory=1;
-				valid=0;
-			}else{										// user input command
+		if(strcmp(command,"")==0){					// if there is no input command
+			printf("Expected command\n");
+			skipCommandHistory=1;
+			valid=0;
+		}else{	
+			pid1 = fork();	
+			if (pid1 > 0){
+				checker = wait(NULL); 						//the wait() function returns the PID of the terminated child.
+			}
+			else if (pid1 == 0){									// user input command
 				skipCommandHistory=0;
 				strcpy(tempCommand,command);
 				strcpy(commandToHistory,command);
@@ -669,45 +669,46 @@ int main()
 					valid=1;
 				}else if(strcmp(argsArr[0], "cut") == 0){
 					strcpy(argsArr[0], "mv");
-					execvp(argsArr[0], argsArr);
-					pid1 = 0;
+					execvp(argsArr[0], &argsArr[0]);
+					printf("\n");
+					valid = 1;
 				}else if(strcmp(argsArr[0], "cat") == 0){
-					execvp(argsArr[0], argsArr);
-					pid1 = 0;
+					execvp(argsArr[0], &argsArr[0]);
+					valid = 1;
 				}else{											// input command is not supported by the program
 					printf("%s: Command not found\n",argsArr[0]);
 					valid=0;
-				}
+				} 
 			}
+		}
 
-			if(count==0 && skipCommandHistory==0){
-				if (head == NULL){		//creates a head node
-					head = malloc(sizeof(HIST));
-					strcpy(head->inputCommand, commandToHistory);
-					head->commandCount = count + 1;
-					head->valid=valid;
-					head->next = NULL;
-					count = count + 1;
-				}
-			}
-			else if (count >= 1 && skipCommandHistory==0){
-				HIST *temp = head;
-				while (temp->next != NULL){
-					temp = temp->next;
-				}
-				temp->next = malloc(sizeof(HIST));
-				strcpy(temp->next->inputCommand, commandToHistory);
-				temp->next->commandCount = count + 1;
-				temp->next->valid = valid;
-				temp->next->next = NULL;
-
+		if(count==0 && skipCommandHistory==0){
+			if (head == NULL){		//creates a head node
+				head = malloc(sizeof(HIST));
+				strcpy(head->inputCommand, commandToHistory);
+				head->commandCount = count + 1;
+				head->valid=valid;
+				head->next = NULL;
 				count = count + 1;
 			}
-			inputPrompt();
-			getchar();
-			strcpy(command,"");							// update command value to empty string
-			scanf("%[^\n]s", command);					// accepts new command
 		}
+		else if (count >= 1 && skipCommandHistory==0){
+			HIST *temp = head;
+			while (temp->next != NULL){
+				temp = temp->next;
+			}
+			temp->next = malloc(sizeof(HIST));
+			strcpy(temp->next->inputCommand, commandToHistory);
+			temp->next->commandCount = count + 1;
+			temp->next->valid = valid;
+			temp->next->next = NULL;
+
+			count = count + 1;
+		}
+		inputPrompt();
+		getchar();
+		strcpy(command,"");							// update command value to empty string
+		scanf("%[^\n]s", command);					// accepts new command
 	}
 	printf("Program terminated\n");
 }
