@@ -75,26 +75,20 @@ int modeIsNumber(char word[]){
 	return 1;
 }
 
-int isNumber(char word[]){
-	int length = strlen(word);
-	int index,decimalPointNum=0;
-	for(index=0;index<length;index++){
-		if(word[0]=='-'){
-		}else if((isdigit(word[index])==0 && word[index]!='.')||(word[index]=='.' && decimalPointNum!=0)){		// if the element is not a number
-			return 0;	
-		}else if(word[index]=='.' && decimalPointNum==0){													// accepts a decimal point character for floating-point numbers
-			decimalPointNum++;
-		}
-	}
-	return 1;
-}
-
 int isIntNumber(char word[]){
 	int length = strlen(word);
 	int index;
 	for(index=0;index<length;index++){
-		if(isdigit(word[index])==0){		// if the element is not an integer
+		if(index==0 && (word[index]!='-' && isdigit(word[index])==0 )){
 			return 0;
+		}else{
+
+		}
+		
+		if(index!=0 && isdigit(word[index])==0){		// if the element is not an integer
+			return 0;
+		}else{
+
 		}
 	}
 	return 1;
@@ -112,116 +106,91 @@ int checkSize(int size){					// checks the input if it has an appropriate length
 
 int addition(char* arr[100], int size){
 	int number,n=2;
-	float sum=0;
+	int sum=0;
 	while(n<size){
-		if(isNumber(arr[n])==0){
-			printf("expected number data type in operand %d\n",(n-1));
+		if(isIntNumber(arr[n])==0){
+			printf("expected integer data type in operand %d\n",(n-1));
 			return 0;
 		}
 		else{
-			sum+=atof(arr[n]);
+			sum+=atoi(arr[n]);
 		}
 		n++;
 	}
-	if(sum-(int)sum==0){
-		number = (int)sum;
-		printf("%d\n",number);
-	}else{
-		printf("%f\n",sum);	
-	}
+	printf("%d\n",sum);	
 	return 1;
 }
 
 int subtraction(char* arr[100], int size){
 	int number,n=2;
-	float diff;
-	diff=atof(arr[n]);
+	int diff;
+	diff=atoi(arr[n]);
 	n++;
 	while(n<size){
-		if(isNumber(arr[n])==0){
-			printf("expected number data type in operand %d\n",(n-1));
+		if(isIntNumber(arr[n])==0){
+			printf("expected integer data type in operand %d\n",(n-1));
 			return 0;
 		}
-		diff-=atof(arr[n]);
+		diff-=atoi(arr[n]);
 		n++;
 	}
-	if(diff-(int)diff==0){
-		number = (int)diff;
-		printf("%d\n",number);
-	}else{
-		printf("%f\n",diff);	
-	}
+	printf("%d\n",diff);
 	return 1;
 }
 
 int multiplication(char* arr[100], int size){
 	int number,n=2;
-	float product;
-	product=atof(arr[n]);
+	int product;
+	product=atoi(arr[n]);
 	n++;
 	while(n<size){
-		if(isNumber(arr[n])==0){
-			printf("expected number data type in operand %d\n",(n-1));
+		if(isIntNumber(arr[n])==0){
+			printf("expected integer data type in operand %d\n",(n-1));
 			return 0;
 		}
-		product=product*atof(arr[n]);
+		product=product*atoi(arr[n]);
 		n++;
 	}
-	if(product-(int)product==0){
-		number = (int)product;
-		printf("%d\n",number);
-	}else{
-		printf("%f\n",product);	
-	}
+	printf("%d\n",product);
 	return 1;
 }
 
 int division(char* arr[100], int size){
 	int number,n=2;
-	float quotient;
-	quotient=atof(arr[n]);
+	int quotient;
+	quotient=atoi(arr[n]);
 	n++;
 	while(n<size){
-		if(isNumber(arr[n])==0){
-			printf("expected number data type in operand %d\n",(n-1));
+		if(isIntNumber(arr[n])==0){
+			printf("expected integer data type in operand %d\n",(n-1));
 			return 0;
 		}
-		quotient=quotient/atof(arr[n]);
+		quotient=quotient/atoi(arr[n]);
 		n++;
 	}
-	if(quotient-(int)quotient==0){
-		number = (int)quotient;
-		printf("%d\n",number);
-	}else{
-		printf("%f\n",quotient);	
-	}
+	printf("%d\n",quotient);
 	return 1;
 }
 
 int exponentiation(char* arr[100], int size){
 	int number,n=2;
-	double power,base;
-	power=atof(arr[size-1]);
-	base=atof(arr[size-2]);
+	int power,base;
+	power=atoi(arr[size-1]);
+	base=atoi(arr[size-2]);
 	n=size-2;
 	while(n>=2){
-		if(isNumber(arr[n])==0){
-			printf("expected number data type in operand %d\n",(n-1));
+		if(isIntNumber(arr[n])==0){
+			printf("expected integer data type in operand %d\n",(n-1));
 			return 0;
 		}
 		power=pow(base,power);
-		base=atof(arr[n]);
+		base=atoi(arr[n]);
 		if(base<0){
 			power=power-(power*2);
 		}
 		n--;
 	}
-	if(power-(long int)power==0){
-		number = (int)power;	
-		printf("%d\n",number);
-	}else{
-		printf("%f\n",power);	
-	}
+	printf("%d\n",power);
 	return 1;
 }
 
@@ -237,47 +206,36 @@ int modulo(char* arr[100], int size){
 		modulo=modulo%atoi(arr[n]);
 		n++;
 	}
-	if(modulo-(int)modulo==0){
-		number = (int)modulo;
-		printf("%d\n",number);
-	}else{
-		printf("%d\n",modulo);	
-	}
+	printf("%d\n",modulo);
 	return 1;
 }
 
 int mean(char* arr[100], int size){
 	int n = 2;
 	int number = 2;
-	float meanAns;
-	float sum = 0;
+	int meanAns;
+	int sum = 0;
 	while(n < size){
-		if(isNumber(arr[n]) == 0){
-			printf("expected number data type in operand %d\n",(n - 1));
+		if(isIntNumber(arr[n]) == 0){
+			printf("expected integer data type in operand %d\n",(n - 1));
 			return 0;
 		}
 		else{
-			sum += atof(arr[n]);
+			sum += atoi(arr[n]);
 		}
 		n++;
 	}
 	meanAns = sum / (size - 2);
-	if(meanAns - (int) meanAns == 0){
-		number = (int) meanAns;
-		printf("%d\n", number);
-	}
-	else{
-		meanAns = sum / (size - 2);
-		printf("%f\n", meanAns);
-	}
+	meanAns = sum / (size - 2);
+	printf("%d\n", meanAns);
 	return 1;
 }
 
 int median(char* arr[100], int size){
 	int medArrSize = size - 2;
-	float medArr[medArrSize];
-	float temp = (float) medArrSize / 2;
-	float medAns = 0;
+	int medArr[medArrSize];
+	int temp = (int) medArrSize / 2;
+	int medAns = 0;
 	int number;
 	int middle = 0;
 	int i, j;
@@ -285,15 +243,15 @@ int median(char* arr[100], int size){
 	
 	n++;
 	while (n < size){
-		if(isNumber(arr[n])==0){
-			printf("expected number data type in operand %d\n",(n - 1));
+		if(isIntNumber(arr[n])==0){
+			printf("expected integer data type in operand %d\n",(n - 1));
 			return 0;
 		}
 		n++;
 	}
 
 	for (i = 0; i < medArrSize; i++){
-		medArr[i] = atof(arr[i + 2]);
+		medArr[i] = atoi(arr[i + 2]);
 	}
 
 	if (temp - (int) temp > 0){
@@ -319,55 +277,44 @@ int median(char* arr[100], int size){
 		medAns = (medArr[middle] + medArr[middle + 1]) / 2;
 	}
 	
-	if (medAns - (int) medAns == 0){
-		number = (int) medAns;
-		printf("%d\n", number);
-	}
-	else{
-		printf("%f\n", medAns);
-	}
+	
+	printf("%d\n", medAns);
 
 	return 1;
 }
 
-float mode(char* arr[], int size){
+int mode(char* arr[], int size){
 	int modArrSize = size - 2;
-	float modArr[modArrSize];
-	float medAns = 0;
+	int modArr[modArrSize];
+	int medAns = 0;
 	int number;
 	int middle = 0;
 	int i, j;
 	int n = 2;
-	float modAns = 0;
+	int modAns = 0;
 	int maxCount = 0;
 
 	n++;
 	if(size==3){									// if the input has one operand, it will be the mode
-		if(isNumber(arr[2])==0){
-			printf("expected number data type in operand 1\n");
+		if(isIntNumber(arr[2])==0){
+			printf("expected integer data type in operand 1\n");
 			return 0;
 		}else{
-			modAns=atof(arr[2]);
-		   	if (modAns - (int) modAns == 0){
-				number = (int) modAns;
-				printf("%d\n", number);
-			}
-			else{
-				printf("%f\n", modAns);
-			}
+			modAns=atoi(arr[2]);
+			printf("%d\n", modAns);
 			return 1;
 		} 
 	}else{
 		while (n < size){
-			if(isNumber(arr[n])==0){
-				printf("expected number data type in operand %d\n",(n - 1));
+			if(isIntNumber(arr[n])==0){
+				printf("expected integer data type in operand %d\n",(n - 1));
 				return 0;
 			}
 			n++;
 		}
 
 		for (i = 0; i < modArrSize; i++){
-			modArr[i] = atof(arr[i + 2]);
+			modArr[i] = atoi(arr[i + 2]);
 		}
 
 		for (i = 0; i < modArrSize; i++) {
@@ -389,13 +336,8 @@ float mode(char* arr[], int size){
 	   	}
 
 	   	else{
-	   		if (modAns - (int) modAns == 0){
-				number = (int) modAns;
-				printf("%d\n", number);
-			}
-			else{
-				printf("%f\n", modAns);
-			}
+	   		
+			printf("%d\n", modAns);
 	   	}
 	   	return 1;
 	}
@@ -532,51 +474,41 @@ int statFunction(char* arr[100], int size){
 	}
 }
 
-float minimum(char* arr[100], int size){
+int minimum(char* arr[100], int size){
 	int number,n=1;
-	float min=19999998;
+	int min=19999998;
 	while(n<size){
-		if(isNumber(arr[n])==0){
-			printf("expected number data type in operand %d\n",(n));
+		if(isIntNumber(arr[n])==0){
+			printf("expected integer data type in operand %d\n",(n));
 			return 0;
 		}
 		else{
-			if(atof(arr[n])<min){
-				min=atof(arr[n]);
+			if(atoi(arr[n])<min){
+				min=atoi(arr[n]);
 			}
 		}
 		n++;
 	}
-	if(min-(int)min==0){
-		number = (int)min;
-		printf("%d\n",number);
-	}else{
-		printf("%f\n",min);	
-	}
+	printf("%d\n",min);	
 	return 1;
 }
 
 int maximum(char* arr[100], int size){
 	int number,n=1;
-	float max=-19999998;
+	int max=-19999998;
 	while(n<size){
-		if(isNumber(arr[n])==0){
-			printf("expected number data type in operand %d\n",(n));
+		if(isIntNumber(arr[n])==0){
+			printf("expected integer data type in operand %d\n",(n));
 			return 0;
 		}
 		else{
-			if(atof(arr[n])>max){
-				max=atof(arr[n]);
+			if(atoi(arr[n])>max){
+				max=atoi(arr[n]);
 			}
 		}
 		n++;
 	}
-	if(max-(int)max==0){
-		number = (int)max;
-		printf("%d\n",number);
-	}else{
-		printf("%f\n",max);	
-	}
+	printf("%d\n",max);	
 	return 1;
 }
 
@@ -674,6 +606,7 @@ int main()
 					valid = 1;
 				}else if(strcmp(argsArr[0], "cat") == 0){
 					execvp(argsArr[0], &argsArr[0]);
+					printf("\n");
 					valid = 1;
 				}else{											// input command is not supported by the program
 					printf("%s: Command not found\n",argsArr[0]);
