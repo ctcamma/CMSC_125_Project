@@ -18,6 +18,7 @@
 		there is no default mode for arith and stat commands
 		arguments only accepts numbers
 		arith commands allows a minimum number of 2 arguments
+		the length of input commands for each line is limited to 100 characters
  **/
 
 #include <stdio.h>
@@ -41,26 +42,6 @@ typedef struct history{
 void inputPrompt(){							// main menu function
 	printf(">> ");
 }
-
-// void commandLog(HIST *head, ){
-// 	HIST *temp;
-// 	temp = head;					//temp points to whatever head ois pointing to
-// 	while (temp->next != NULL){
-// 		temp = temp->next;
-// 	}
-// 	temp->next = malloc(sizeof(single));	//memory allocation
-// 	printf("Enter a number: ");
-// 	scanf("%d", &temp->next->num);
-// 	temp->next->next = NULL;		//marks the end of the linked list
-
-// 	printf("Ouput: ");
-// 	temp = head;					//temp points again to whatever head is pointing to
-// 	while (temp != NULL){
-// 		printf("%d ", temp->num);	//prints the output
-// 		temp = temp->next;			//proceeds to the next node
-// 	}
-// 	printf("\n");
-// }
 
 int modeIsNumber(char word[]){
 	int length = strlen(word);
@@ -178,6 +159,7 @@ int exponentiation(char* arr[100], int size){
 	power=atoi(arr[size-1]);
 	base=atoi(arr[size-2]);
 	n=size-2;
+	
 	while(n>=2){
 		if(isIntNumber(arr[n])==0){
 			printf("expected integer data type in operand %d\n",(n-1));
@@ -200,7 +182,7 @@ int modulo(char* arr[100], int size){
 	n++;
 	while(n<size){
 		if(isIntNumber(arr[n])==0){
-			printf("expected integer data type in operand %d\n",(n-1));
+			printf("Expected integer data type in operand %d\n",(n-1));
 			return 0;
 		}
 		modulo=modulo%atoi(arr[n]);
@@ -347,11 +329,11 @@ int arithFunction(char* arr[100], int size){
 	int answer;
 	int answerMod;
 	if(size==1){
-		printf("expected argument after %s\n",arr[0]);
+		printf("Expected argument after %s\n",arr[0]);
 		return 0;
 	}else{
 		if(modeIsNumber(arr[1])==1){
-			printf("operation for command is not specified\n");
+			printf("Operation for command is not specified\n");
 			return 0;
 		}else{
 			if(strcmp(arr[1],"-add")==0){					// addition operation
@@ -359,10 +341,10 @@ int arithFunction(char* arr[100], int size){
 					answer=addition(arr,size);
 					return answer;
 				}else if(checkSize(size)==2){
-					printf("expected at least 2 operands\n");
+					printf("Expected at least 2 operands\n");
 					return 0;
 				}else{
-					printf("expected arguments after %s\n",arr[1]);
+					printf("Expected arguments after %s\n",arr[1]);
 					return 0;
 				}
 				
@@ -371,10 +353,10 @@ int arithFunction(char* arr[100], int size){
 					answer=subtraction(arr,size);
 					return answer;
 				}else if(checkSize(size)==2){
-					printf("expected at least 2 operands\n");
+					printf("Expected at least 2 operands\n");
 					return 0;
 				}else{
-					printf("expected arguments after %s\n",arr[1]);
+					printf("Expected arguments after %s\n",arr[1]);
 					return 0;
 				}
 			}else if(strcmp(arr[1],"-mul")==0){				// multiplication operation
@@ -382,10 +364,10 @@ int arithFunction(char* arr[100], int size){
 					answer=multiplication(arr,size);
 					return answer;
 				}else if(checkSize(size)==2){
-					printf("expected at least 2 operands\n");
+					printf("Expected at least 2 operands\n");
 					return 0;
 				}else{
-					printf("expected arguments after %s\n",arr[1]);
+					printf("Expected arguments after %s\n",arr[1]);
 					return 0;
 				}
 			}else if(strcmp(arr[1],"-div")==0){				// division operation
@@ -393,10 +375,10 @@ int arithFunction(char* arr[100], int size){
 					answer=division(arr,size);
 					return answer;
 				}else if(checkSize(size)==2){
-					printf("expected at least 2 operands\n");
+					printf("Expected at least 2 operands\n");
 					return 0;
 				}else{
-					printf("expected arguments after %s\n",arr[1]);
+					printf("Expected arguments after %s\n",arr[1]);
 					return 0;
 				}
 			}else if(strcmp(arr[1],"-pow")==0){				// modulo operation
@@ -404,10 +386,10 @@ int arithFunction(char* arr[100], int size){
 					answer=exponentiation(arr,size);
 					return answer;
 				}else if(checkSize(size)==2){
-					printf("expected at least 2 operands\n");
+					printf("Expected at least 2 operands\n");
 					return 0;
 				}else{
-					printf("expected arguments after %s\n",arr[1]);
+					printf("Expected arguments after %s\n",arr[1]);
 					return 0;
 				}
 			}else if(strcmp(arr[1],"-mod")==0){				// modulo operation
@@ -415,14 +397,14 @@ int arithFunction(char* arr[100], int size){
 					answerMod=modulo(arr,size);
 					return answer;
 				}else if(checkSize(size)==2){
-					printf("expected at least 2 operands\n");
+					printf("Expected at least 2 operands\n");
 					return 0;
 				}else{
-					printf("expected arguments after %s\n",arr[1]);
+					printf("Expected arguments after %s\n",arr[1]);
 					return 0;
 				}
 			}else{
-				printf("%s: mode of operation not found\n",arr[1]);
+				printf("%s: Mode of operation not found\n",arr[1]);
 				return 0;
 			}
 		}
@@ -432,7 +414,7 @@ int arithFunction(char* arr[100], int size){
 int statFunction(char* arr[100], int size){
 	int answer;
 	if(size==1){
-		printf("expected argument after %s\n",arr[0]);
+		printf("Expected argument after %s\n",arr[0]);
 		return 0;
 	}else{
 		if(modeIsNumber(arr[1])==1){
@@ -444,7 +426,7 @@ int statFunction(char* arr[100], int size){
 					answer = mean(arr, size);
 					return answer;
 				}else{
-					printf("expected arguments after %s\n",arr[1]);
+					printf("Expected arguments after %s\n",arr[1]);
 					return 0;
 				}
 				
@@ -453,7 +435,7 @@ int statFunction(char* arr[100], int size){
 					answer = median(arr, size);
 					return answer;
 				}else{
-					printf("expected arguments after %s\n",arr[1]);
+					printf("Expected arguments after %s\n",arr[1]);
 					return 0;
 				}
 				
@@ -462,12 +444,12 @@ int statFunction(char* arr[100], int size){
 					answer = mode(arr, size);
 					return answer;
 				}else{
-					printf("expected arguments after %s\n",arr[1]);
+					printf("Expected arguments after %s\n",arr[1]);
 					return 0;
 				}
 				
 			}else{
-				printf("%s: mode of operation not found\n",arr[1]);
+				printf("%s: Mode of operation not found\n",arr[1]);
 				return 0;
 			}
 		}
@@ -515,7 +497,7 @@ int maximum(char* arr[100], int size){
 int minFunction(char* arr[100], int size){
 	int number;
 	if(size==1){
-		printf("expected argument after %s\n",arr[0]);
+		printf("Expected argument after %s\n",arr[0]);
 		return 0;
 	}else{
 		number = minimum(arr,size);
@@ -526,7 +508,7 @@ int minFunction(char* arr[100], int size){
 int maxFunction(char* arr[100], int size){
 	int number;
 	if(size==1){
-		printf("expected argument after %s\n",arr[0]);
+		printf("Expected argument after %s\n",arr[0]);
 		return 0;
 	}else{
 		number = maximum(arr,size);
@@ -561,7 +543,6 @@ int main()
 	inputPrompt();
 	strcpy(command,"");
 	scanf("%[^\n]s", command);
-	
 	while(strcmp(command,"quit")!=0 && strcmp(command,"q")!=0 && strcmp(command,"exit")!=0){
 		if(strcmp(command,"")==0){					// if there is no input command
 			printf("Expected command\n");
